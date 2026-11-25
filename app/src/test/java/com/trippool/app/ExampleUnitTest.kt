@@ -1,4 +1,4 @@
-package com.personalhub.trippool
+package com.trippool.app
 
 import org.junit.Test
 
