@@ -3,24 +3,48 @@ plugins {
     alias(libs.plugins.kotlin.compose)
 }
 
+// Release signing comes from the environment (the GitHub workflow sets these from its secrets), never from a file in
+// the repository. Without them a release build is left unsigned, and debug builds are not affected.
+val signingKeystorePath: String? = providers.environmentVariable("ANDROID_KEYSTORE_PATH").orNull
+val signingKeystorePassword: String? = providers.environmentVariable("ANDROID_KEYSTORE_PASSWORD").orNull
+val signingKeyAlias: String? = providers.environmentVariable("ANDROID_KEY_ALIAS").orNull
+val signingKeyPassword: String? = providers.environmentVariable("ANDROID_KEY_PASSWORD").orNull
+
+// Android only installs an update whose version code is higher than the installed one, so the workflow passes the
+// build number. Local builds keep 1.
+val tripVersionCode: Int = providers.gradleProperty("tripVersionCode").orNull?.toIntOrNull() ?: 1
+val tripVersionName: String = providers.gradleProperty("tripVersionName").orNull?.takeIf { it.isNotBlank() } ?: "1.0"
+
 android {
-    namespace = "com.personalhub.trippool"
+    namespace = "com.trippool.app"
     compileSdk {
         version = release(37)
     }
 
     defaultConfig {
-        applicationId = "com.personalhub.trippool"
+        applicationId = "com.trippool.app"
         minSdk = 29
         targetSdk = 37
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = tripVersionCode
+        versionName = tripVersionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        if (signingKeystorePath != null && signingKeystorePassword != null && signingKeyAlias != null && signingKeyPassword != null) {
+            create("release") {
+                storeFile = file(signingKeystorePath)
+                storePassword = signingKeystorePassword
+                keyAlias = signingKeyAlias
+                keyPassword = signingKeyPassword
+            }
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig = signingConfigs.findByName("release")
             optimization {
                 enable = false
             }

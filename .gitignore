@@ -1,15 +1,38 @@
 *.iml
 .gradle
 /local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
+
+# Signing -- never commit real keystores
+*.jks
+*.keystore
+keystore.properties
+# Android Studio / IntelliJ IDEA settings
+.idea/
 .DS_Store
 /build
 /captures
 .externalNativeBuild
 .cxx
 local.properties
+
+# Local test photos and videos, never committed
+/testmedia/
+
+# Kotlin compiler session files (created by Kotlin 2.x builds)
+.kotlin/
+
+# Built apps and crash dumps, never commit these
+*.apk
+*.aab
+*.hprof
+
+# Windows and log noise
+Thumbs.db
+*.log
+
+# Personal settings of AI coding tools
+.claude/settings.local.json
+
+# Local commit queue
+commit_queue.ps1
+
