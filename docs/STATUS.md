@@ -1,7 +1,7 @@
 # Status
 
-**Last updated:** 2026-11-24
-**Phase:** Before coding. Proposal submitted 2026-11-19. Next: Week 1-2 spike.
+**Last updated:** 2026-11-26
+**Phase:** Project created, no features yet. Proposal submitted 2026-11-19. Next: Week 1-2 spike.
 
 > Update at the end of every work session (humans and AI). Keep it short. Mark unverified things **untested**.
 
@@ -9,13 +9,14 @@
 
 | # | Task | Owner | Status |
 |---|---|---|---|
-| 1 | Create repo + Android project from the template (Kotlin, Compose, Hilt, Room, minSdk 29) following `docs/STRUCTURE.md`; copy in these docs, `AGENTS.md`, pointer files and `scripts/`; commit | | todo |
 | 2 | Get 2-3 test phones; note model + Android version of each | | todo |
 | 3 | Spike: Nearby advertise/discover/connect between 2 phones | | todo |
 | 4 | Spike: send a 100 MB file, measure speed per Strategy; try chunk sizes | | todo |
 | 5 | `JoinToken` (encode/decode) + HKDF + HMAC with unit tests (use vectors in `API_CONTRACT.md`); needs no phone | | todo |
 | 6 | Read `docs/DESIGN.md` as a team; confirm or change the accent color and fonts before any UI code | | todo |
 | 7 | Spike extras: read `MAX_BYTES_DATA_SIZE`, test CHUNK vs payload ordering, pick foreground service type, write permission list per Android version | | todo |
+| 8 | Add the four signing secrets on GitHub (`.github/SETUP.md` steps 1-4). Until then `main` builds an unsigned debug APK and tags fail | | todo |
+| 9 | Protect `main` on GitHub: require a pull request and the `check` status check, no force pushes (`.github/SETUP.md` step 5) | | todo |
 
 ## Done
 
@@ -25,6 +26,9 @@
 | 2026-11-23 | Starter docs written |
 | 2026-11-24 | Docs reviewed against the final proposal; test vectors recomputed; `DESIGN.md` added |
 | 2026-11-24 | `STRUCTURE.md`, `AGENTS.md` rewrite, pointer files and `scripts/check-layers.sh` added |
+| 2026-11-25 | Android project created from the template as `com.trippool.app`, docs and `scripts/` moved in, theme tokens added (was Next-up task 1) |
+| 2026-11-25 | GitHub automation: `ci.yml` (layer check, tests, lint, debug build on every PR), `android-apk.yml` (APK on push to `main` and tags), Dependabot |
+| 2026-11-26 | PR template and `.gitattributes` added; type scale mapping and `surfaceTint` fixed |
 
 ## Decisions to confirm as a team
 
@@ -58,6 +62,9 @@ None yet.
 - All test vectors in `API_CONTRACT.md` (token, text code, `k_auth`, `k_tag`, `groupTag`, AUTH proof) were recomputed independently on 2026-11-24 and match.
 
 ## Session log (newest first)
+
+- 2026-11-26: added `.github/pull_request_template.md` (AGENTS.md summary format and checklist) and `.gitattributes` (LF for `gradlew` and `.sh`, CRLF for `.bat`). Hand-over command in `AGENTS.md` and `README.md` is now `./gradlew testDebugUnitTest lintDebug assembleDebug`, matching CI; merges to `main` go through a PR with green CI. `SETUP.md` gained the branch protection step and the no-secrets note. Theme: `Type.kt` now maps Title to `titleLarge` and `headlineSmall`, Title large to `headlineMedium` (the top app bar uses `titleLarge`, so titles were 28sp); mapping written into `DESIGN.md` section 3. `surfaceTint` is transparent in both schemes. Not compiled, not run.
+- 2026-11-25: added GitHub automation: `ci.yml`, `android-apk.yml` (signed release APK with secrets, debug APK without), `dependabot.yml` and `.github/SETUP.md`. Untested until pushed to GitHub.
 
 - 2026-11-25: moved the docs, pointer files and `scripts/` into the project. Renamed the template package from `com.personalhub.trippool` to `com.trippool.app` (namespace, applicationId, folders, package lines). Created the folder tree from `STRUCTURE.md` (empty folders, local only). Added `AGENTS.md` sections (team, outside content, environment, stuck). Set `allowBackup="false"` and made `backup_rules.xml` / `data_extraction_rules.xml` exclude everything. Replaced the template theme with the DESIGN.md tokens (`Color.kt`, `Type.kt`, `Shape.kt`, `Spacing.kt`, `Theme.kt`; no dynamic color, no purple). Not compiled, not run. Assumptions: Plex fonts not added yet, so system fonts are used (change `UiFontFamily` / `CodeFontFamily` in `Type.kt` once the files are in `res/font`); Material slots DESIGN.md does not name are mapped to the nearest token (see the comment in `Theme.kt`). The palette is still a proposal until the team confirms it (task 6).
 
