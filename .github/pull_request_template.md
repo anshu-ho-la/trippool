@@ -12,7 +12,7 @@ Untested / manual steps for a human:
 
 ## Checklist
 
-- [ ] One task from `docs/STATUS.md`, on a `feature/` or `fix/` branch
+- [ ] One task from `docs/STATUS.md`
 - [ ] `bash scripts/check-layers.sh` passes
 - [ ] `./gradlew testDebugUnitTest lintDebug assembleDebug` passes (Windows: `gradlew.bat ...`)
 - [ ] New pure logic has unit tests; wireless code is marked untested with manual steps above

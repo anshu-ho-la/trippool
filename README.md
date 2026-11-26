@@ -38,7 +38,7 @@ bash scripts/check-layers.sh
 ./gradlew installDebug
 ```
 
-On Windows use `gradlew.bat` and run the `.sh` script in Git Bash. Work on a branch and open a pull request into `main`; CI must be green before merge. Setup of the GitHub automation and signing secrets: [`.github/SETUP.md`](.github/SETUP.md).
+On Windows use `gradlew.bat` and run the `.sh` script in Git Bash. Setup of the GitHub automation and signing secrets: [`.github/SETUP.md`](.github/SETUP.md).
 
 ## Docs
 

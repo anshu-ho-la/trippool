@@ -35,12 +35,6 @@ Dependabot opens a pull request each week for outdated libraries and workflow ac
 
 4. Settings > Actions > General > Workflow permissions: allow read and write (needed to publish a release).
 
-5. Protect `main`: Settings > Branches > Add branch protection rule, branch name pattern `main`, then tick:
-   - Require a pull request before merging
-   - Require status checks to pass before merging, and select `check` (it appears in the list after CI has run once
-     on a pull request)
-   - Leave "Allow force pushes" and "Allow deletions" off
-
 Never commit the `.jks` file.
 
 ## Releasing

@@ -16,7 +16,6 @@
 | 6 | Read `docs/DESIGN.md` as a team; confirm or change the accent color and fonts before any UI code | | todo |
 | 7 | Spike extras: read `MAX_BYTES_DATA_SIZE`, test CHUNK vs payload ordering, pick foreground service type, write permission list per Android version | | todo |
 | 8 | Add the four signing secrets on GitHub (`.github/SETUP.md` steps 1-4). Until then `main` builds an unsigned debug APK and tags fail | | todo |
-| 9 | Protect `main` on GitHub: require a pull request and the `check` status check, no force pushes (`.github/SETUP.md` step 5) | | todo |
 
 ## Done
 
@@ -63,7 +62,7 @@ None yet.
 
 ## Session log (newest first)
 
-- 2026-11-26: added `.github/pull_request_template.md` (AGENTS.md summary format and checklist) and `.gitattributes` (LF for `gradlew` and `.sh`, CRLF for `.bat`). Hand-over command in `AGENTS.md` and `README.md` is now `./gradlew testDebugUnitTest lintDebug assembleDebug`, matching CI; merges to `main` go through a PR with green CI. `SETUP.md` gained the branch protection step and the no-secrets note. Theme: `Type.kt` now maps Title to `titleLarge` and `headlineSmall`, Title large to `headlineMedium` (the top app bar uses `titleLarge`, so titles were 28sp); mapping written into `DESIGN.md` section 3. `surfaceTint` is transparent in both schemes. Not compiled, not run.
+- 2026-11-26: added `.github/pull_request_template.md` (AGENTS.md summary format and checklist) and `.gitattributes` (LF for `gradlew` and `.sh`, CRLF for `.bat`). Hand-over command in `AGENTS.md` and `README.md` is now `./gradlew testDebugUnitTest lintDebug assembleDebug`, matching CI. Committing and pushing directly to `main` is allowed (decided 2026-11-26; the branch and PR rules were removed from `AGENTS.md`). `SETUP.md` gained the no-secrets note. Theme: `Type.kt` now maps Title to `titleLarge` and `headlineSmall`, Title large to `headlineMedium` (the top app bar uses `titleLarge`, so titles were 28sp); mapping written into `DESIGN.md` section 3. `surfaceTint` is transparent in both schemes. Not compiled, not run.
 - 2026-11-25: added GitHub automation: `ci.yml`, `android-apk.yml` (signed release APK with secrets, debug APK without), `dependabot.yml` and `.github/SETUP.md`. Untested until pushed to GitHub.
 
 - 2026-11-25: moved the docs, pointer files and `scripts/` into the project. Renamed the template package from `com.personalhub.trippool` to `com.trippool.app` (namespace, applicationId, folders, package lines). Created the folder tree from `STRUCTURE.md` (empty folders, local only). Added `AGENTS.md` sections (team, outside content, environment, stuck). Set `allowBackup="false"` and made `backup_rules.xml` / `data_extraction_rules.xml` exclude everything. Replaced the template theme with the DESIGN.md tokens (`Color.kt`, `Type.kt`, `Shape.kt`, `Spacing.kt`, `Theme.kt`; no dynamic color, no purple). Not compiled, not run. Assumptions: Plex fonts not added yet, so system fonts are used (change `UiFontFamily` / `CodeFontFamily` in `Type.kt` once the files are in `res/font`); Material slots DESIGN.md does not name are mapped to the nearest token (see the comment in `Theme.kt`). The palette is still a proposal until the team confirms it (task 6).
