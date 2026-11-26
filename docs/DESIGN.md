@@ -53,6 +53,18 @@ Two families, both SIL Open Font License, bundled in `res/font/` with their lice
 | Caption | 12sp / 16 | 400 | Counts, durations, dates |
 | Code | 22sp / 32 | 500 mono | Join code, letter spacing 0.5sp |
 
+Material slots (in `Type.kt`). Material components read these slots, so the mapping decides what they show:
+
+| Style | Material slot | Why |
+|---|---|---|
+| Title | `titleLarge`, `headlineSmall` | The top app bar uses `titleLarge`; alert dialog titles use `headlineSmall` |
+| Title large | `headlineMedium` | Trip name, set on the text directly |
+| Body | `bodyLarge` | |
+| Body small | `bodyMedium` | |
+| Label | `labelLarge` | Buttons |
+| Caption | `bodySmall` | |
+| Code | `CodeTextStyle` (not a Material slot) | Join code only |
+
 Rules:
 - Sentence case everywhere. The join code is the only uppercase text.
 - No text below 12sp and no weight below 400.

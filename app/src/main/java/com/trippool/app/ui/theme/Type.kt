@@ -13,24 +13,30 @@ import androidx.compose.ui.unit.sp
 val UiFontFamily: FontFamily = FontFamily.Default
 val CodeFontFamily: FontFamily = FontFamily.Monospace
 
-// Mapping of the DESIGN.md styles to Material slots:
-//   Title large -> titleLarge, Title -> titleMedium, Body -> bodyLarge, Body small -> bodyMedium,
+// Mapping of the DESIGN.md styles to Material slots (also written in DESIGN.md section 3):
+//   Title -> titleLarge (top app bar titles) and headlineSmall (dialog titles),
+//   Title large -> headlineMedium (trip name), Body -> bodyLarge, Body small -> bodyMedium,
 //   Label -> labelLarge, Caption -> bodySmall
+
+// DESIGN.md "Title": 20sp / 26, SemiBold.
+private val TitleStyle = TextStyle(
+    fontFamily = UiFontFamily,
+    fontWeight = FontWeight.SemiBold,
+    fontSize = 20.sp,
+    lineHeight = 26.sp,
+    letterSpacing = 0.sp
+)
+
 val Typography = Typography(
-    titleLarge = TextStyle(
+    headlineMedium = TextStyle(
         fontFamily = UiFontFamily,
         fontWeight = FontWeight.SemiBold,
         fontSize = 28.sp,
         lineHeight = 34.sp,
         letterSpacing = 0.sp
     ),
-    titleMedium = TextStyle(
-        fontFamily = UiFontFamily,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 20.sp,
-        lineHeight = 26.sp,
-        letterSpacing = 0.sp
-    ),
+    headlineSmall = TitleStyle,
+    titleLarge = TitleStyle,
     bodyLarge = TextStyle(
         fontFamily = UiFontFamily,
         fontWeight = FontWeight.Normal,

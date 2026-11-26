@@ -5,12 +5,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 
 // Built from docs/DESIGN.md section 2. No dynamic color (wallpaper colors must not replace the palette).
 //
 // ASSUMPTION: DESIGN.md names only some Material slots. The slots it does not name (secondary, tertiary,
 // the *Container slots, inverse*, errorContainer) are mapped to the nearest documented token so that no
 // default Material purple leaks in. Review these mappings together with the palette.
+//
+// surfaceTint is transparent so surfaces never pick up an accent tint (DESIGN.md section 6: flat).
 
 private val LightColorScheme = lightColorScheme(
     primary = LightAccent,
@@ -31,7 +34,7 @@ private val LightColorScheme = lightColorScheme(
     onSurface = LightTextPrimary,
     surfaceVariant = LightRaised,
     onSurfaceVariant = LightTextSecondary,
-    surfaceTint = LightAccent,
+    surfaceTint = Color.Transparent,
     inverseSurface = LightTextPrimary,
     inverseOnSurface = LightBackground,
     inversePrimary = DarkAccent,
@@ -69,7 +72,7 @@ private val DarkColorScheme = darkColorScheme(
     onSurface = DarkTextPrimary,
     surfaceVariant = DarkRaised,
     onSurfaceVariant = DarkTextSecondary,
-    surfaceTint = DarkAccent,
+    surfaceTint = Color.Transparent,
     inverseSurface = DarkTextPrimary,
     inverseOnSurface = DarkBackground,
     inversePrimary = LightAccent,
