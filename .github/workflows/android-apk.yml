@@ -1,7 +1,9 @@
 name: Build Android APK
 
 # Runs on every push to the main branch, when started by hand from the Actions tab, and on a version tag such as
-# v1.0.0. A tag also publishes the APK as a GitHub Release.
+# v1.0.0. With the signing secrets set (see .github/SETUP.md) it builds a signed release APK, and a tag also publishes
+# it as a GitHub Release. Without the secrets it builds an unsigned debug APK instead, so main stays green. A tag
+# without the secrets fails, so an unsigned app is never published.
 on:
   push:
     branches: [main]
@@ -35,18 +37,33 @@ jobs:
           if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
             name="${GITHUB_REF_NAME#v}"
           else
-            name="1.0.${{ github.run_number }}"
+            name="1.0.${GITHUB_RUN_NUMBER}"
           fi
           echo "name=$name" >> "$GITHUB_OUTPUT"
 
+      - name: Check for the signing secrets
+        id: signing
+        env:
+          KEYSTORE: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          if [ -n "$KEYSTORE" ]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::The signing secrets are not set, so this run builds an unsigned debug APK. See .github/SETUP.md."
+          fi
+
+      - name: Stop a release that has no signing secrets
+        if: steps.signing.outputs.available != 'true' && startsWith(github.ref, 'refs/tags/v')
+        run: |
+          echo "ANDROID_KEYSTORE_BASE64 is not set: add the signing secrets before releasing (see .github/SETUP.md)." >&2
+          exit 1
+
       - name: Restore the signing key
+        if: steps.signing.outputs.available == 'true'
         env:
           ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
         run: |
-          if [ -z "$ANDROID_KEYSTORE_BASE64" ]; then
-            echo "ANDROID_KEYSTORE_BASE64 is not set: add the signing secrets first (see .github/SETUP.md)." >&2
-            exit 1
-          fi
           echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/trippool.jks"
           echo "ANDROID_KEYSTORE_PATH=$RUNNER_TEMP/trippool.jks" >> "$GITHUB_ENV"
 
@@ -55,27 +72,39 @@ jobs:
           chmod +x ./gradlew
           ./gradlew testDebugUnitTest
 
-      - name: Build the release APK
+      - name: Build the signed release APK
+        if: steps.signing.outputs.available == 'true'
         env:
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          VERSION_NAME: ${{ steps.version.outputs.name }}
         run: |
           ./gradlew assembleRelease \
-            -PtripVersionCode="${{ github.run_number }}" \
-            -PtripVersionName="${{ steps.version.outputs.name }}"
+            -PtripVersionCode="$GITHUB_RUN_NUMBER" \
+            -PtripVersionName="$VERSION_NAME"
+          cp app/build/outputs/apk/release/app-release.apk trip-pool.apk
 
-      - name: Name the APK
-        run: cp app/build/outputs/apk/release/app-release.apk trip-pool.apk
+      - name: Build the unsigned debug APK
+        if: steps.signing.outputs.available != 'true'
+        env:
+          VERSION_NAME: ${{ steps.version.outputs.name }}
+        run: |
+          ./gradlew assembleDebug \
+            -PtripVersionCode="$GITHUB_RUN_NUMBER" \
+            -PtripVersionName="$VERSION_NAME"
+          cp app/build/outputs/apk/debug/app-debug.apk trip-pool-debug.apk
 
       - uses: actions/upload-artifact@v4
         with:
           name: trip-pool-apk
-          path: trip-pool.apk
+          path: trip-pool*.apk
+          if-no-files-found: error
           retention-days: 30
 
       - name: Publish a release for a version tag
         if: startsWith(github.ref, 'refs/tags/v')
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "${{ github.ref_name }}" trip-pool.apk --title "${{ github.ref_name }}" --generate-notes
+          TAG: ${{ github.ref_name }}
+        run: gh release create "$TAG" trip-pool.apk --title "$TAG" --generate-notes

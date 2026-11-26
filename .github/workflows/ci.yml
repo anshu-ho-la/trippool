@@ -26,6 +26,9 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
 
+      - name: Check the layer rules
+        run: bash scripts/check-layers.sh
+
       - name: Test, lint and build
         run: |
           chmod +x ./gradlew
