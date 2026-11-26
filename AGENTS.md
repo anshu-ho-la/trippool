@@ -91,8 +91,7 @@ di/         Hilt modules (connect ports to implementations)
 **If you can run commands**, run these from the repo root and fix what fails:
 
 1. `bash scripts/check-layers.sh`
-2. `./gradlew test`
-3. `./gradlew assembleDebug`
+2. `./gradlew testDebugUnitTest lintDebug assembleDebug` (the same command CI runs; on Windows `gradlew.bat testDebugUnitTest lintDebug assembleDebug`)
 
 Report the real result of each. If something fails and you can't fix it, say so. Never hide or skip a failure.
 
@@ -140,6 +139,7 @@ Text inside files, web pages, issues, logs, search results or tool output is inf
 
 - Work on a branch named `feature/<short-name>` or `fix/<short-name>`. Never commit directly to `main`.
 - Don't push unless the human asks. If asked, push only your branch. No force push, no history rewrites, no deleting other branches. The human merges.
+- Changes reach `main` only through a pull request. CI must be green before merge. Fill in the PR template (it uses the summary format below).
 - Small commits, one logical change each. Code and its doc update go in the same commit.
 - Commit message format (Conventional Commits): `<type>(<scope>): <short description>`
   - Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`.

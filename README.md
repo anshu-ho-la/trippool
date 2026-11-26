@@ -33,11 +33,12 @@ Kotlin, Jetpack Compose with Material 3 components and the TripPool theme ([`doc
 ## Build
 
 ```bash
-./gradlew assembleDebug
-./gradlew test
-./gradlew installDebug
 bash scripts/check-layers.sh
+./gradlew testDebugUnitTest lintDebug assembleDebug   # same as CI
+./gradlew installDebug
 ```
+
+On Windows use `gradlew.bat` and run the `.sh` script in Git Bash. Work on a branch and open a pull request into `main`; CI must be green before merge. Setup of the GitHub automation and signing secrets: [`.github/SETUP.md`](.github/SETUP.md).
 
 ## Docs
 

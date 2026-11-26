@@ -16,7 +16,9 @@ trippool/
 │   ├── copilot-instructions.md   one-line pointer to AGENTS.md
 │   ├── SETUP.md                  how the GitHub automation and signing secrets are set up
 │   ├── dependabot.yml            weekly dependency update PRs
+│   ├── pull_request_template.md  PR description: the AGENTS.md summary format and checklist
 │   └── workflows/                ci.yml (checks every PR), android-apk.yml (signed release APK)
+├── .gitattributes            line endings: LF for gradlew and .sh, CRLF for .bat
 ├── .gitignore
 ├── docs/                     all project documents (see below)
 ├── scripts/

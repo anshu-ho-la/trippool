@@ -5,6 +5,8 @@ Two workflows run on GitHub:
 - **CI** checks every pull request: unit tests, lint, debug build.
 - **Build Android APK** runs on every push to `main` and on a tag such as `v1.0.0`. It runs the tests, builds a signed
   release APK and keeps it as a download on the run (30 days). A tag also publishes it as a GitHub Release.
+  Until the signing secrets below are added, a push to `main` builds an unsigned debug APK instead, and a tag fails
+  (so an unsigned app is never published).
 
 Dependabot opens a pull request each week for outdated libraries and workflow actions.
 
@@ -32,6 +34,12 @@ Dependabot opens a pull request each week for outdated libraries and workflow ac
    | `ANDROID_KEY_PASSWORD` | the key password |
 
 4. Settings > Actions > General > Workflow permissions: allow read and write (needed to publish a release).
+
+5. Protect `main`: Settings > Branches > Add branch protection rule, branch name pattern `main`, then tick:
+   - Require a pull request before merging
+   - Require status checks to pass before merging, and select `check` (it appears in the list after CI has run once
+     on a pull request)
+   - Leave "Allow force pushes" and "Allow deletions" off
 
 Never commit the `.jks` file.
 
