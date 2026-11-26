@@ -1,0 +1,26 @@
+# Line endings. Git stores text files with LF; these rules decide what lands on disk at checkout.
+# Without them a Windows checkout can give the shell scripts CRLF endings, which breaks them in Git Bash and in CI.
+* text=auto
+
+# Shell scripts must keep LF everywhere (Git Bash, GitHub Actions on Linux).
+*.sh   text eol=lf
+gradlew text eol=lf
+
+# Windows scripts keep CRLF.
+*.bat  text eol=crlf
+*.cmd  text eol=crlf
+*.ps1  text eol=crlf
+
+# Binary files: never touch line endings or try to diff them.
+*.jar      binary
+*.png      binary
+*.jpg      binary
+*.jpeg     binary
+*.webp     binary
+*.gif      binary
+*.ttf      binary
+*.otf      binary
+*.jks      binary
+*.keystore binary
+*.apk      binary
+*.aab      binary
